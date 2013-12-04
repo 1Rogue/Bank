@@ -16,6 +16,8 @@
  */
 package com.rogue.bank.data;
 
+import java.util.Observable;
+
 /**
  * Account superclass
  *
@@ -24,7 +26,7 @@ package com.rogue.bank.data;
  * @author CrypticStorm
  * @version 1.0.0
  */
-public abstract class Account {
+public abstract class Account extends Observable {
 
     protected final int id;
     protected final int pin;
@@ -105,7 +107,10 @@ public abstract class Account {
      * @return The new account balance.
      */
     public final double deposit(final double amount) {
-        return this.balance += amount;
+        this.balance += amount;
+        this.setChanged();
+        this.notifyObservers(this.balance);
+        return this.balance;
     }
 
     /**
@@ -131,7 +136,10 @@ public abstract class Account {
      * @return The new account balance.
      */
     public final double withdraw(final double amount) {
-        return this.balance -= amount;
+        this.balance -= amount;
+        this.setChanged();
+        this.notifyObservers(this.balance);
+        return this.balance;
     }
 
     /**
@@ -187,7 +195,10 @@ public abstract class Account {
      * @return the new account balance.
      */
     public double compileInterest() {
-        return this.balance += this.balance * this.getMonthlyInterestRate();
+        this.balance += this.balance * this.getMonthlyInterestRate();
+        this.setChanged();
+        this.notifyObservers(this.balance);
+        return this.balance;
     }
 
     /**

@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
+import java.util.Observer;
 
 /**
  * Manages bank data
@@ -38,7 +39,7 @@ import java.util.Observable;
  * @author 1Rogue
  * @version 1.0.0
  */
-public class DataManager extends Observable {
+public class DataManager implements Observer {
 
     private final Bank project;
     private final String bankLoc;
@@ -104,6 +105,7 @@ public class DataManager extends Observable {
                         int pin = Integer.parseInt(info[2]);
                         double bal = Double.parseDouble(info[3]);
                         Account temp = this.makeAccount(type, id, pin, bal);
+                        temp.addObserver(this);
                         this.accounts.put(temp.getID(), temp);
                     } catch (NumberFormatException ex) {
                         // error
@@ -189,6 +191,19 @@ public class DataManager extends Observable {
                 return new CDAccount(aid, pin, bal);
         }
         return null;
+    }
+
+    /**
+     * Notifies the {@link GUIManager} upon balance updates
+     * 
+     * @since 1.0.0
+     * @version 1.0.0
+     * 
+     * @param o The account
+     * @param arg The balance
+     */
+    public void update(Observable o, Object arg) {
+        // does stuff
     }
 
 }
