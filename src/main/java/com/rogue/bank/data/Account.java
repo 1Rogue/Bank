@@ -20,11 +20,180 @@ package com.rogue.bank.data;
  * Account superclass
  *
  * @since 1.0.0
- * @author 1Rogue
+ * @author CrypticStorm
  * @version 1.0.0
  */
 public abstract class Account {
-    
-    
-    
+
+    protected final int id;
+    protected final int pin;
+    protected double balance;
+
+    /**
+     * Account constructor
+     *
+     * @since 1.0.0
+     * @version 1.0.0
+     *
+     * @param id Account id number
+     * @param pin Account pin number (4 digits)
+     * @param balance Account balance (Non-negative)
+     */
+    protected Account(final int id, final int pin, double balance) {
+        this.id = id;
+        this.pin = pin;
+        this.balance = balance;
+    }
+
+    /**
+     * Returns the Account ID number.
+     *
+     * @since 1.0.0
+     * @version 1.0.0
+     *
+     * @return Account ID number
+     */
+    public final int getID() {
+        return this.id;
+    }
+
+    /**
+     * Returns the Account PIN number.
+     *
+     * @since 1.0.0
+     * @version 1.0.0
+     *
+     * @return Account PIN number
+     */
+    public final int getPIN() {
+        return this.pin;
+    }
+
+    /**
+     * Returns the Account balance.
+     *
+     * @since 1.0.0
+     * @version 1.0.0
+     *
+     * @return Account balance
+     */
+    public final double getBalance() {
+        return this.balance;
+    }
+
+    /**
+     * Return if this account can deposit the given amount.
+     *
+     * @since 1.0.0
+     * @version 1.0.0
+     *
+     * @param amount The amount to deposit.
+     * @return If this account can deposit the given amount.
+     */
+    public boolean canDeposit(final double amount) {
+        return amount >= 0;
+    }
+
+    /**
+     * Deposits a given value into an account.
+     *
+     * @since 1.0.0
+     * @version 1.0.0
+     *
+     * @param amount The amount to deposit.
+     * @return The new account balance.
+     */
+    public final double deposit(final double amount) {
+        return this.balance += amount;
+    }
+
+    /**
+     * Return if this account can withdraw the given amount.
+     *
+     * @since 1.0.0
+     * @version 1.0.0
+     *
+     * @param amount The amount to withdraw.
+     * @return If this account can withdraw the given amount.
+     */
+    public boolean canWithdraw(final double amount) {
+        return amount >= 0 && amount <= this.balance;
+    }
+
+    /**
+     * WIthdraws a given value from an account.
+     *
+     * @since 1.0.0
+     * @version 1.0.0
+     *
+     * @param amount The amount to withdraw.
+     * @return The new account balance.
+     */
+    public final double withdraw(final double amount) {
+        return this.balance -= amount;
+    }
+
+    /**
+     * Returns a char representing the account type. Defined by individual
+     * account type.
+     *
+     * @since 1.0.0
+     * @version 1.0.0
+     *
+     * @return char representation of the account type
+     */
+    public abstract char getDisplayCharacter();
+
+    /**
+     * Returns a String representing the account type. Defined by individual
+     * account type.
+     *
+     * @since 1.0.0
+     * @version 1.0.0
+     *
+     * @return String representation of the account type
+     */
+    public abstract String getDisplayString();
+
+    /**
+     * Returns the minimum balance needed to open an account. Defined by
+     * individual account type.
+     *
+     * @since 1.0.0
+     * @version 1.0.0
+     *
+     * @return minimum balance of the Account
+     */
+    public abstract double getMinimumBalance();
+
+    /**
+     * Returns the monthly interest rate for an account. Defined by individual
+     * account type.
+     *
+     * @since 1.0.0
+     * @version 1.0.0
+     *
+     * @return the monthly interest rate.
+     */
+    public abstract double getMonthlyInterestRate();
+
+    /**
+     * Compiles interest on an account. Responsible for monthly fees.
+     *
+     * @since 1.0.0
+     * @version 1.0.0
+     *
+     * @return the new account balance.
+     */
+    public double compileInterest() {
+        return this.balance += this.balance * this.getMonthlyInterestRate();
+    }
+
+    public String formatWith(char delimiter) {
+        return new StringBuilder()
+                .append(this.getID()).append(delimiter)
+                .append(this.getDisplayCharacter()).append(delimiter)
+                .append(this.getPIN()).append(delimiter)
+                .append(this.getBalance()).toString();
+    }
 }
