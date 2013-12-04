@@ -16,6 +16,8 @@
  */
 package com.rogue.bank;
 
+import com.rogue.bank.data.DataManager;
+
 /**
  * Main class for Bank
  *
@@ -24,6 +26,8 @@ package com.rogue.bank;
  * @version 1.0.0
  */
 public class Bank {
+    
+    private final DataManager data;
 
     /**
      * Initial method
@@ -54,6 +58,7 @@ public class Bank {
      * @param batchFile A batch file location for quick execution
      */
     public Bank(String bankFile, String batchFile) {
+        this.data = new DataManager(this, bankFile);
         if (batchFile == null) {
             // run GUI
         } else {
