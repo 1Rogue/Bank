@@ -203,10 +203,10 @@ public abstract class Account extends Observable {
 
     /**
      * Formats the account information using a delimiter
-     * 
+     *
      * @since 1.0.0
      * @version 1.0.0
-     * 
+     *
      * @param delimiter The delimiter to use
      * @return A formatted string of the information
      */

@@ -40,7 +40,7 @@ import java.util.Observer;
  * @version 1.0.0
  */
 public class DataManager implements Observer {
-
+    
     private final Bank project;
     private final String bankLoc;
     private final Map<Integer, Account> accounts = new HashMap<Integer, Account>();
@@ -81,10 +81,10 @@ public class DataManager implements Observer {
     public synchronized Account getAccount(int id) {
         return this.accounts.get(id);
     }
-    
+
     /**
      * Loads accounts from the bank file
-     * 
+     *
      * @since 1.0.0
      * @version 1.0.0
      */
@@ -96,7 +96,7 @@ public class DataManager implements Observer {
             fr = new FileReader(f);
             reader = new BufferedReader(fr);
             String inLine;
-            while((inLine = reader.readLine()) != null) {
+            while ((inLine = reader.readLine()) != null) {
                 String[] info = inLine.split(this.delimiter + "");
                 if (info.length == 4) {
                     char type = info[1].charAt(0);
@@ -129,10 +129,10 @@ public class DataManager implements Observer {
             }
         }
     }
-    
+
     /**
      * Saves accounts to the bank file
-     * 
+     *
      * @since 1.0.0
      * @version 1.0.0
      */
@@ -168,13 +168,13 @@ public class DataManager implements Observer {
             }
         }
     }
-    
+
     /**
      * Gets an account based on the char value
-     * 
+     *
      * @since 1.0.0
      * @version 1.0.0
-     * 
+     *
      * @param acc The char-value of the account
      * @param aid The account id
      * @param pin The account pin
@@ -182,7 +182,7 @@ public class DataManager implements Observer {
      * @return The appropriate {@link Account} type, null if none exists
      */
     private Account makeAccount(char acc, int aid, int pin, double bal) {
-        switch(acc) {
+        switch (acc) {
             case 's':
                 return new SavingsAccount(aid, pin, bal);
             case 'x':
@@ -195,15 +195,15 @@ public class DataManager implements Observer {
 
     /**
      * Notifies the {@link GUIManager} upon balance updates
-     * 
+     *
      * @since 1.0.0
      * @version 1.0.0
-     * 
+     *
      * @param o The account
      * @param arg The balance
      */
     public void update(Observable o, Object arg) {
         // does stuff
     }
-
+    
 }

@@ -39,7 +39,7 @@ public final class CDAccount extends Account {
      */
     public CDAccount(final int id, final int pin, final double balance) {
         super(id, pin, balance);
-        if(this.balance < this.getMinimumBalance()) {
+        if (this.balance < this.getMinimumBalance()) {
             throw new IllegalArgumentException();
         }
     }

@@ -63,7 +63,7 @@ public final class SavingsAccount extends Account {
 
     @Override
     public double compileInterest() {
-        if(this.balance < this.getMinimumBalance()) {
+        if (this.balance < this.getMinimumBalance()) {
             return this.balance -= this.balance > 10.0 ? 10.0 : 0.1 * this.balance;
         } else {
             return super.compileInterest();
