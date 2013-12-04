@@ -27,10 +27,10 @@ public class Bank {
 
     /**
      * Initial method
-     * 
+     *
      * @since 1.0.0
      * @version 1.0.0
-     * 
+     *
      * @param args Command-line arguments
      */
     public static void main(String[] args) {
@@ -43,13 +43,13 @@ public class Bank {
             System.exit(1);
         }
     }
-    
+
     /**
      * Bank constructor
-     * 
+     *
      * @since 1.0.0
      * @version 1.0.0
-     * 
+     *
      * @param bankFile The main banking file location to access
      * @param batchFile A batch file location for quick execution
      */
@@ -60,5 +60,5 @@ public class Bank {
             // run batch
         }
     }
-    
+
 }
