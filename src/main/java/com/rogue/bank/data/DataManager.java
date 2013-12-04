@@ -17,6 +17,9 @@
 package com.rogue.bank.data;
 
 import com.rogue.bank.Bank;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Observable;
 
 /**
  * Manages bank data
@@ -25,9 +28,10 @@ import com.rogue.bank.Bank;
  * @author 1Rogue
  * @version 1.0.0
  */
-public class DataManager {
+public class DataManager extends Observable {
     
     private final Bank project;
+    private final Map<Integer, ClientData> accounts = new HashMap<Integer, ClientData>();
     
     /**
      * DataManager constructor
@@ -40,6 +44,19 @@ public class DataManager {
      */
     public DataManager(Bank project, String bankFile) {
         this.project = project;
+    }
+    
+    /**
+     * Returns a map of accounts
+     * 
+     * @since 1.0.0
+     * @version 1.0.0
+     * 
+     * @param id The account id
+     * @return Account based on id, null if no account exists
+     */
+    public synchronized ClientData getAccount(int id) {
+        return this.accounts.get(id);
     }
 
 }
