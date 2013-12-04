@@ -32,6 +32,9 @@ public class DataManager {
     /**
      * DataManager constructor
      * 
+     * @since 1.0.0
+     * @version 1.0.0
+     * 
      * @param project The {@link Bank} instance
      * @param bankFile String for bank file location
      */
