@@ -17,6 +17,9 @@
 package com.rogue.bank.data;
 
 import com.rogue.bank.Bank;
+import com.rogue.bank.data.accounts.CDAccount;
+import com.rogue.bank.data.accounts.CheckingAccount;
+import com.rogue.bank.data.accounts.SavingsAccount;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -179,11 +182,11 @@ public class DataManager extends Observable {
     private Account makeAccount(char acc, int aid, int pin, double bal) {
         switch(acc) {
             case 's':
-                //return savings account
+                return new SavingsAccount(aid, pin, bal);
             case 'x':
-                //return savings account
+                return new CheckingAccount(aid, pin, bal);
             case 'c':
-                //return cd account
+                return new CDAccount(aid, pin, bal);
         }
         return null;
     }
