@@ -20,6 +20,7 @@ package com.rogue.bank.data;
  * Account superclass
  *
  * @since 1.0.0
+ * @author 1Rogue
  * @author CrypticStorm
  * @version 1.0.0
  */
@@ -189,6 +190,15 @@ public abstract class Account {
         return this.balance += this.balance * this.getMonthlyInterestRate();
     }
 
+    /**
+     * Formats the account information using a delimiter
+     * 
+     * @since 1.0.0
+     * @version 1.0.0
+     * 
+     * @param delimiter The delimiter to use
+     * @return A formatted string of the information
+     */
     public String formatWith(char delimiter) {
         return new StringBuilder()
                 .append(this.getID()).append(delimiter)
