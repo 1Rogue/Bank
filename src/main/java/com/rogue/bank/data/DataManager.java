@@ -20,6 +20,7 @@ import com.rogue.bank.Bank;
 import com.rogue.bank.data.accounts.CDAccount;
 import com.rogue.bank.data.accounts.CheckingAccount;
 import com.rogue.bank.data.accounts.SavingsAccount;
+import com.rogue.bank.gui.GUIManager;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -29,8 +30,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Observable;
-import java.util.Observer;
 
 /**
  * Manages bank data
@@ -39,8 +38,8 @@ import java.util.Observer;
  * @author 1Rogue
  * @version 1.0.0
  */
-public class DataManager implements Observer {
-    
+public class DataManager {
+
     private final Bank project;
     private final String bankLoc;
     private final Map<Integer, Account> accounts = new HashMap<Integer, Account>();
@@ -60,12 +59,12 @@ public class DataManager implements Observer {
         this.bankLoc = bankFile;
         this.loadAccounts();
         Runtime.getRuntime().addShutdownHook(new Thread() {
-            
+
             @Override
             public void run() {
                 saveAccounts();
             }
-            
+
         });
     }
 
@@ -92,6 +91,8 @@ public class DataManager implements Observer {
         File f = new File(this.bankLoc);
         FileReader fr = null;
         BufferedReader reader = null;
+        GUIManager gui = this.project.getGUIManager();
+        boolean useGUI = gui != null;
         try {
             fr = new FileReader(f);
             reader = new BufferedReader(fr);
@@ -105,7 +106,9 @@ public class DataManager implements Observer {
                         int pin = Integer.parseInt(info[2]);
                         double bal = Double.parseDouble(info[3]);
                         Account temp = this.makeAccount(type, id, pin, bal);
-                        temp.addObserver(this);
+                        if (useGUI) {
+                            temp.addObserver(gui);
+                        }
                         this.accounts.put(temp.getID(), temp);
                     } catch (NumberFormatException ex) {
                         // error
@@ -193,17 +196,4 @@ public class DataManager implements Observer {
         return null;
     }
 
-    /**
-     * Notifies the {@link GUIManager} upon balance updates
-     *
-     * @since 1.0.0
-     * @version 1.0.0
-     *
-     * @param o The account
-     * @param arg The balance
-     */
-    public void update(Observable o, Object arg) {
-        // does stuff
-    }
-    
 }
