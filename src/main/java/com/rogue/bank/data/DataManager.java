@@ -18,9 +18,11 @@ package com.rogue.bank.data;
 
 import com.rogue.bank.Bank;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -130,7 +132,36 @@ public class DataManager extends Observable {
      * @version 1.0.0
      */
     private void saveAccounts() {
-        
+        File old = new File(this.bankLoc);
+        old.renameTo(new File(this.bankLoc + ".old"));
+        old.deleteOnExit();
+        File f = new File(this.bankLoc);
+        if (f.exists()) {
+            f.delete();
+        }
+        FileWriter fw = null;
+        BufferedWriter writer = null;
+        try {
+            f.createNewFile();
+            fw = new FileWriter(f);
+            writer = new BufferedWriter(fw);
+            for (Account acc : this.accounts.values()) {
+                writer.write(acc.formatWith(this.delimiter));
+            }
+        } catch (IOException ex) {
+            // error
+        } finally {
+            try {
+                if (fw != null) {
+                    fw.close();
+                }
+                if (writer != null) {
+                    writer.close();
+                }
+            } catch (IOException ex) {
+                // error
+            }
+        }
     }
     
     /**
