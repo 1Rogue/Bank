@@ -17,6 +17,11 @@
 package com.rogue.bank.data;
 
 import com.rogue.bank.Bank;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
@@ -29,34 +34,127 @@ import java.util.Observable;
  * @version 1.0.0
  */
 public class DataManager extends Observable {
-    
+
     private final Bank project;
-    private final Map<Integer, ClientData> accounts = new HashMap<Integer, ClientData>();
-    
+    private final String bankLoc;
+    private final Map<Integer, Account> accounts = new HashMap<Integer, Account>();
+    private final char delimiter = '\t';
+
     /**
      * DataManager constructor
-     * 
+     *
      * @since 1.0.0
      * @version 1.0.0
-     * 
+     *
      * @param project The {@link Bank} instance
      * @param bankFile String for bank file location
      */
     public DataManager(Bank project, String bankFile) {
         this.project = project;
+        this.bankLoc = bankFile;
+        this.loadAccounts();
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            
+            @Override
+            public void run() {
+                saveAccounts();
+            }
+            
+        });
+    }
+
+    /**
+     * Returns an {@link Account}
+     *
+     * @since 1.0.0
+     * @version 1.0.0
+     *
+     * @param id The account id
+     * @return Account based on id, null if no account exists
+     */
+    public synchronized Account getAccount(int id) {
+        return this.accounts.get(id);
     }
     
     /**
-     * Returns a map of accounts
+     * Loads accounts from the bank file
+     * 
+     * @since 1.0.0
+     * @version 1.0.0
+     */
+    private void loadAccounts() {
+        File f = new File(this.bankLoc);
+        FileReader fr = null;
+        BufferedReader reader = null;
+        try {
+            fr = new FileReader(f);
+            reader = new BufferedReader(fr);
+            String inLine;
+            while((inLine = reader.readLine()) != null) {
+                String[] info = inLine.split(this.delimiter + "");
+                if (info.length == 4) {
+                    char type = info[1].charAt(0);
+                    try {
+                        int id = Integer.parseInt(info[0]);
+                        int pin = Integer.parseInt(info[2]);
+                        double bal = Double.parseDouble(info[3]);
+                        Account temp = this.makeAccount(type, id, pin, bal);
+                        this.accounts.put(temp.getID(), temp);
+                    } catch (NumberFormatException ex) {
+                        // error
+                    }
+                }
+            }
+        } catch (FileNotFoundException ex) {
+            // error
+        } catch (IOException ex) {
+            // error
+        } finally {
+            try {
+                if (fr != null) {
+                    fr.close();
+                }
+                if (reader != null) {
+                    reader.close();
+                }
+            } catch (IOException ex) {
+                // error
+            }
+        }
+    }
+    
+    /**
+     * Saves accounts to the bank file
+     * 
+     * @since 1.0.0
+     * @version 1.0.0
+     */
+    private void saveAccounts() {
+        
+    }
+    
+    /**
+     * Gets an account based on the char value
      * 
      * @since 1.0.0
      * @version 1.0.0
      * 
-     * @param id The account id
-     * @return Account based on id, null if no account exists
+     * @param acc The char-value of the account
+     * @param aid The account id
+     * @param pin The account pin
+     * @param bal The account balance
+     * @return The appropriate {@link Account} type, null if none exists
      */
-    public synchronized ClientData getAccount(int id) {
-        return this.accounts.get(id);
+    private Account makeAccount(char acc, int aid, int pin, double bal) {
+        switch(acc) {
+            case 's':
+                //return savings account
+            case 'x':
+                //return savings account
+            case 'c':
+                //return cd account
+        }
+        return null;
     }
 
 }
