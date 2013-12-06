@@ -43,7 +43,8 @@ public class BankController {
     }
     
     /**
-     * Validates a login with the provided account id and pin
+     * Validates a login with the provided {@link Account} id and pin. Will set
+     * the session if it is valid.
      * 
      * @since 1.0.0
      * @version 1.0.0
@@ -54,7 +55,71 @@ public class BankController {
      */
     public boolean validLogin(int id, int pin) {
         Account acc = this.project.getDataManager().getAccount(id);
-        return acc != null && acc.getPIN() == pin;
+        if (acc != null && acc.getPIN() == pin) {
+            this.project.getSession().setAccount(acc);
+            return true;
+        }
+        return false;
+    }
+    
+    /**
+     * Verifies the existance of an {@link Account}, but does not verify the pin
+     * 
+     * @since 1.0.0
+     * @version 1.0.0
+     * 
+     * @param id The id to check for
+     * @return True if exists, false otherwise
+     */
+    public boolean validAccount(int id) {
+        Account acc = this.project.getDataManager().getAccount(id);
+        return acc != null;
+    }
+    
+    /**
+     * Attempts to make a deposit to the current {@link Account} in use
+     * 
+     * @since 1.0.0
+     * @version 1.0.0
+     * 
+     * @param amount The amount to deposit
+     */
+    public synchronized void deposit(double amount) {
+        Account acc = this.project.getSession().getAccount();
+        if (acc.canDeposit(amount)) {
+            acc.deposit(amount);
+        }
+    }
+    
+    /**
+     * Gets the balance of the current {@link Account}
+     * 
+     * @since 1.0.0
+     * @version 1.0.0
+     * 
+     * @return The current {@link Account} balance
+     */
+    public synchronized double getBalance() {
+        return this.project.getSession().getAccount().getBalance();
+    }
+    
+    /**
+     * Attempts to withdraw a provided amount of money
+     * 
+     * @since 1.0.0
+     * @version 1.0.0
+     * 
+     * @param amount The amount of money to withdraw
+     * @return True if withdrawn, false if invalid amount is provided
+     */
+    public synchronized boolean withdraw(double amount) {
+        Account acc = this.project.getSession().getAccount();
+        if (acc.canWithdraw(amount)) {
+            acc.withdraw(amount);
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }
