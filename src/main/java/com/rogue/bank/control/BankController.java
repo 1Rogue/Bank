@@ -42,6 +42,16 @@ public class BankController {
         this.project = project;
     }
     
+    /**
+     * Validates a login with the provided account id and pin
+     * 
+     * @since 1.0.0
+     * @version 1.0.0
+     * 
+     * @param id The id to check for
+     * @param pin The pin to verify with
+     * @return True if valid id and pin, false otherwise
+     */
     public boolean validLogin(int id, int pin) {
         Account acc = this.project.getDataManager().getAccount(id);
         return acc != null && acc.getPIN() == pin;
