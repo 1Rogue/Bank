@@ -14,43 +14,37 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.rogue.bank.gui.panels;
+package com.rogue.bank.control;
 
 import com.rogue.bank.Bank;
-import com.rogue.bank.gui.AbsPanel;
-import java.awt.GridLayout;
+import com.rogue.bank.data.Account;
 
 /**
- * Login panel for {@link GUIWindow}
+ * Controls interactions for the Bank
  *
  * @since 1.0.0
  * @author 1Rogue
  * @version 1.0.0
  */
-public class Login extends AbsPanel {
+public class BankController {
+    
+    private final Bank project;
     
     /**
-     * Login constructor
+     * {@link BankController} constructor
      * 
      * @since 1.0.0
      * @version 1.0.0
      * 
-     * @param project The main {@link Bank}
+     * @param project The main {@link Bank} instance
      */
-    public Login(Bank project){
-        super(project);
-        
-        this.setLayout(new GridLayout(0, 3));
+    public BankController(Bank project) {
+        this.project = project;
     }
-
-    @Override
-    public String getTitle() {
-        return "Welcome to ACME Banking";
-    }
-
-    @Override
-    public int[] getPanelSize() {
-        return new int[] {300, 100};
+    
+    public boolean validLogin(int id, int pin) {
+        Account acc = this.project.getDataManager().getAccount(id);
+        return acc != null && acc.getPIN() == pin;
     }
 
 }

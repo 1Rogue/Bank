@@ -16,6 +16,7 @@
  */
 package com.rogue.bank;
 
+import com.rogue.bank.control.BankController;
 import com.rogue.bank.data.DataManager;
 import com.rogue.bank.gui.GUIManager;
 
@@ -30,6 +31,7 @@ public class Bank {
 
     private final DataManager data;
     private final GUIManager gui;
+    private final BankController control;
 
     /**
      * Initial method
@@ -61,6 +63,7 @@ public class Bank {
      */
     public Bank(String bankFile, String batchFile) {
         this.data = new DataManager(this, bankFile);
+        this.control = new BankController(this);
         if (batchFile == null) {
             this.gui = new GUIManager(this);
         } else {
@@ -90,6 +93,18 @@ public class Bank {
      */
     public GUIManager getGUIManager() {
         return this.gui;
+    }
+    
+    /**
+     * Gets the {@link BankController} for the project
+     * 
+     * @since 1.0.0
+     * @version 1.0.0
+     * 
+     * @return The {@link BankController}
+     */
+    public BankController getBankController() {
+        return this.control;
     }
 
 }
