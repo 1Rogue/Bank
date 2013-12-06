@@ -32,6 +32,7 @@ public class Bank {
     private final DataManager data;
     private final GUIManager gui;
     private final BankController control;
+    private final Session session;
 
     /**
      * Initial method
@@ -64,6 +65,7 @@ public class Bank {
     public Bank(String bankFile, String batchFile) {
         this.data = new DataManager(this, bankFile);
         this.control = new BankController(this);
+        this.session = new Session();
         if (batchFile == null) {
             this.gui = new GUIManager(this);
         } else {
@@ -105,6 +107,18 @@ public class Bank {
      */
     public BankController getBankController() {
         return this.control;
+    }
+    
+    /**
+     * Returns the current {@link Session} for the project
+     * 
+     * @since 1.0.0
+     * @version 1.0.0
+     * 
+     * @return The current {@link Session}
+     */
+    public Session getSession() {
+        return this.session;
     }
 
 }
