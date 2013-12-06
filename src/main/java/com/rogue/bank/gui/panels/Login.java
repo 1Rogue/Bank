@@ -18,6 +18,7 @@ package com.rogue.bank.gui.panels;
 
 import com.rogue.bank.Bank;
 import com.rogue.bank.gui.AbsPanel;
+import java.awt.GridLayout;
 
 /**
  * Login panel for bank gui utility
@@ -39,12 +40,17 @@ public class Login extends AbsPanel {
     public Login(Bank project){
         super(project);
         
-        
+        this.setLayout(new GridLayout(0, 3));
     }
 
     @Override
     public String getTitle() {
         return "Welcome to ACME Banking";
+    }
+
+    @Override
+    public int[] getPanelSize() {
+        return new int[] {300, 100};
     }
 
 }

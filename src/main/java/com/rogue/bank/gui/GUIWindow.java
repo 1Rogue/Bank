@@ -28,7 +28,7 @@ import javax.swing.JFrame;
  * @author 1Rogue
  * @version 1.0.0
  */
-public class GUIWindow extends JFrame {
+public final class GUIWindow extends JFrame {
     
     private final Bank project;
     
@@ -43,10 +43,10 @@ public class GUIWindow extends JFrame {
     public GUIWindow(Bank project) {
         this.project = project;
         
-        this.setLayout(new BorderLayout());
-        AbsPanel panel = new Login(this.project);
-        this.add(panel, BorderLayout.CENTER);
-        this.setTitle(panel.getTitle());
+        this.swapWindow(new Login(this.project));
+        this.setResizable(false);
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setVisible(true);
     }
     
     /**
@@ -63,6 +63,11 @@ public class GUIWindow extends JFrame {
         this.setLayout(new BorderLayout());
         this.add(panel, BorderLayout.CENTER);
         this.setTitle(panel.getTitle());
+        int[] size = panel.getPanelSize();
+        this.setSize(size[0], size[1]);
+        this.setLocationRelativeTo(null);
+        this.validate();
+        this.repaint();
     }
 
 }

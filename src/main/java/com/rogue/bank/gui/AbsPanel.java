@@ -38,7 +38,6 @@ public abstract class AbsPanel extends JPanel {
      * @param project Main {@link Bank} instance
      */
     public AbsPanel(Bank project) {
-        
         this.project = project;
     }
     
@@ -73,5 +72,18 @@ public abstract class AbsPanel extends JPanel {
      * @return The GUI Frame's title
      */
     public abstract String getTitle();
+    
+    /**
+     * Gets the size of the current panel in use.
+     * 
+     * @since 1.0.0
+     * @version 1.0.0
+     * 
+     * @return A two-length int array with appropriate sizing.
+     *         Should be called like so:<br>
+     *         <ul><li>int[] size = AbsPanel.getSize();</li>
+     *         <li>JFrame.setSize(size[0], size[1]);</li></ul>
+     */
+    public abstract int[] getPanelSize();
     
 }

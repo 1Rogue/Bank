@@ -45,7 +45,7 @@ public class Bank {
         } else if (args.length == 1) {
             new Bank(args[0], null);
         } else {
-            System.err.println("Use: java Bank bankFile [batchFile]");
+            System.err.println("Usage: java Bank bankFile [batchFile]");
             System.exit(1);
         }
     }
