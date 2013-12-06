@@ -44,7 +44,9 @@ public class GUIWindow extends JFrame {
         this.project = project;
         
         this.setLayout(new BorderLayout());
-        this.add(new Login(this.project), BorderLayout.CENTER);
+        AbsPanel panel = new Login(this.project);
+        this.add(panel, BorderLayout.CENTER);
+        this.setTitle(panel.getTitle());
     }
     
     /**
@@ -60,6 +62,7 @@ public class GUIWindow extends JFrame {
         
         this.setLayout(new BorderLayout());
         this.add(panel, BorderLayout.CENTER);
+        this.setTitle(panel.getTitle());
     }
 
 }
