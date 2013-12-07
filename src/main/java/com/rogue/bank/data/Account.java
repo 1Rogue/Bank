@@ -26,7 +26,7 @@ import java.util.Observable;
  * @author CrypticStorm
  * @version 1.0.0
  */
-public abstract class Account extends Observable {
+public abstract class Account extends Observable implements Comparable<Account> {
 
     protected final int id;
     protected final int pin;
@@ -46,6 +46,10 @@ public abstract class Account extends Observable {
         this.id = id;
         this.pin = pin;
         this.balance = balance;
+    }
+
+    public int compareTo(Account other) {
+        return this.id - other.id;
     }
 
     /**
