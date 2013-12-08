@@ -19,6 +19,7 @@ package com.rogue.bank.gui;
 import com.rogue.bank.control.Session;
 import com.rogue.bank.Bank;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -56,6 +57,9 @@ public class ATMFrame extends JFrame {
         this.add(textStuff, BorderLayout.NORTH);
         this.add(this.getOperationButtons(), BorderLayout.CENTER);
         this.setSize(400, 300);
+        this.label.setText(this.current.getLabel());
+        this.setLocationRelativeTo(null);
+        this.setResizable(false);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setVisible(true);
     }
@@ -63,6 +67,7 @@ public class ATMFrame extends JFrame {
     private JPanel getTextField() {
         JPanel back = new JPanel();
         text.setEditable(false);
+        text.setPreferredSize(new Dimension(200, 20));
         back.add(text);
         return back;
     }
@@ -95,7 +100,7 @@ public class ATMFrame extends JFrame {
         clear.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                label.setText("");
+                updateText("");
             }
 
         });
@@ -105,12 +110,11 @@ public class ATMFrame extends JFrame {
 
             public void actionPerformed(ActionEvent e) {
                 if (sess.getAccount() == null) {
-                    updateLabel("Welcome to ACME Banking");
                     current = ATMState.WELCOME;
                 } else {
-                    updateLabel("Press 1 to view balance, 2 to withdraw, and 3 to deposit");
                     current = ATMState.TRANSACTION;
                 }
+                updateLabel(current.getLabel());
             }
 
         });
@@ -141,14 +145,24 @@ public class ATMFrame extends JFrame {
         return back;
     }
 
-    private ActionListener getNumberListner(final String i) {
+    private ActionListener getNumberListner(final String i) {    
         return new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                text.setText(text.getText() + i);
+                updateText(text.getText() + i);
             }
 
         };
+    }
+    
+    public void updateText(final String in) {
+        SwingUtilities.invokeLater(new Runnable() {
+
+            public void run() {
+                text.setText(in);
+            }
+            
+        });
     }
     
     private void updateLabel(final String text) {
@@ -164,34 +178,34 @@ public class ATMFrame extends JFrame {
 }
 
 enum ATMState {
-        WELCOME {
+        WELCOME("Welcome to ACME Banking") {
             @Override
             public ATMState execOK() {
                 //verification
                 return ATMState.ENTERPIN;
             }
         },
-        ENTERPIN {
+        ENTERPIN("Please enter your PIN number") {
             @Override
             public ATMState execOK() {
                 //verification
                 return ATMState.TRANSACTION;
             }
         },
-        TRANSACTION {
+        TRANSACTION("Press 1 to view balance, 2 to withdraw, and 3 to deposit") {
             @Override
             public ATMState execOK() {
                 return this;
             }
         },
-        DEPOSIT {
+        DEPOSIT("Select the amount you would like to deposit") {
             @Override
             public ATMState execOK() {
                 //verification
                 return ATMState.SUCCESS;
             }
         },
-        WITHDRAW {
+        WITHDRAW("Select the amount you would like to withdraw") {
             @Override
             public ATMState execOK() {
                 //verification
@@ -199,25 +213,35 @@ enum ATMState {
                 return ATMState.SUCCESS;
             }
         },
-        BALANCE {
+        BALANCE("BEHOLD: YOUR BALANCE!!1!") {
             @Override
             public ATMState execOK() {
                 //get and display balance
                 return ATMState.TRANSACTION;
             }
         },
-        SUCCESS {
+        SUCCESS("Transaction successful") {
             @Override
             public ATMState execOK() {
                 return ATMState.TRANSACTION;
             }
         },
-        FAILURE {
+        FAILURE("Transaction failed") {
             @Override
             public ATMState execOK() {
                 return ATMState.TRANSACTION;
             }
         };
+        
+        private final String def;
+        
+        private ATMState(String def) {
+            this.def = def;
+        }
+        
+        public String getLabel() {
+            return this.def;
+        }
         
         public abstract ATMState execOK();
     }
