@@ -48,10 +48,12 @@ public class BankFrame extends JFrame implements Observer {
     private final JList list;
     private final JPanel buttonPanel;
     private final ArrayList<String> accStrings;
+    private int index;
 
     public BankFrame(Bank project) {
         this.project = project;
         this.accStrings = this.loadAccounts();
+        this.index = 0;
 
         this.setTitle("Robert Carmosino && Spencer Alderman");
         this.setLayout(new BorderLayout());
@@ -105,7 +107,7 @@ public class BankFrame extends JFrame implements Observer {
         JButton atmButton = new JButton("Open ATM");
         atmButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                refreshAccounts();
+                ATMFrame atmFrame = new ATMFrame(this.project, ++index);
             }
         });
         panel.add(atmButton, BorderLayout.WEST);
