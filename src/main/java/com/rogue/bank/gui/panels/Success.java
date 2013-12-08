@@ -18,39 +18,37 @@ package com.rogue.bank.gui.panels;
 
 import com.rogue.bank.Bank;
 import com.rogue.bank.gui.AbsPanel;
-import java.awt.GridLayout;
 
 /**
- * Login panel for {@link GUIWindow}
+ * Displays a successful transaction
  *
  * @since 1.0.0
  * @author 1Rogue
  * @version 1.0.0
  */
-public class Login extends AbsPanel {
+public class Success extends AbsPanel {
     
     /**
-     * Login constructor
+     * Success constructor
      * 
      * @since 1.0.0
      * @version 1.0.0
      * 
      * @param project The main {@link Bank}
+     * @param type The type of success to display
      */
-    public Login(Bank project){
+    public Success(Bank project, String type) {
         super(project);
-        
-        this.setLayout(new GridLayout(0, 3));
     }
 
     @Override
     public String getTitle() {
-        return "Welcome to ACME Banking";
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public int[] getPanelSize() {
-        return new int[] {300, 100};
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

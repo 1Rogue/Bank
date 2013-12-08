@@ -43,7 +43,7 @@ public final class GUIWindow extends JFrame {
     public GUIWindow(Bank project) {
         this.project = project;
         
-        this.swapWindow(new Login(this.project));
+        this.swapWindow(new Welcome(this.project));
         this.setResizable(false);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setVisible(true);
