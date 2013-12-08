@@ -174,17 +174,17 @@ public class DataManager {
             fw = new FileWriter(f);
             writer = new BufferedWriter(fw);
             for (Account acc : this.accounts.values()) {
-                writer.write(acc.formatWith(this.delimiter));
+                writer.write(acc.formatWith(this.delimiter) + "\n");
             }
         } catch (IOException ex) {
             // error
         } finally {
             try {
-                if (fw != null) {
-                    fw.close();
-                }
                 if (writer != null) {
                     writer.close();
+                }
+                if (fw != null) {
+                    fw.close();
                 }
             } catch (IOException ex) {
                 // error
