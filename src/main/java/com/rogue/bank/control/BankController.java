@@ -18,7 +18,10 @@ package com.rogue.bank.control;
 
 import com.rogue.bank.Bank;
 import com.rogue.bank.data.Account;
+import com.rogue.bank.data.UpdatePacket;
 import java.util.Collection;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  * Controls interactions for the Bank
@@ -27,7 +30,7 @@ import java.util.Collection;
  * @author 1Rogue
  * @version 1.0.0
  */
-public class BankController {
+public class BankController implements Observer {
 
     private final Bank project;
 
@@ -193,6 +196,16 @@ public class BankController {
         } else {
             return false;
         }
+    }
+
+    public void update(Observable o, Object arg) {
+        if (!(o instanceof Account) || !(arg instanceof UpdatePacket)) {
+            return;
+        }
+
+        Account acc = (Account) o;
+        UpdatePacket packet = (UpdatePacket) arg;
+        this.project.getGUIManager().getBankFrame().updateAccount(acc, packet);
     }
 
 }

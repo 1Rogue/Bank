@@ -17,6 +17,7 @@
 package com.rogue.bank.data;
 
 import com.rogue.bank.Bank;
+import com.rogue.bank.control.BankController;
 import com.rogue.bank.data.accounts.CDAccount;
 import com.rogue.bank.data.accounts.CheckingAccount;
 import com.rogue.bank.data.accounts.SavingsAccount;
@@ -112,8 +113,7 @@ public class DataManager {
         File f = new File(this.bankLoc);
         FileReader fr = null;
         BufferedReader reader = null;
-        GUIManager gui = this.project.getGUIManager();
-        boolean useGUI = gui != null;
+        BankController controller = this.project.getBankController();
         try {
             fr = new FileReader(f);
             reader = new BufferedReader(fr);
@@ -127,9 +127,7 @@ public class DataManager {
                         int pin = Integer.parseInt(info[2]);
                         double bal = Double.parseDouble(info[3]);
                         Account temp = this.makeAccount(type, id, pin, bal);
-                        if (useGUI) {
-                            temp.addObserver(gui);
-                        }
+                        temp.addObserver(controller);
                         this.registerAccount(temp);
                     } catch (NumberFormatException ex) {
                         // error

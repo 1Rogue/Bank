@@ -64,8 +64,8 @@ public class Bank {
      * @param batchFile A batch file location for quick execution
      */
     public Bank(String bankFile, String batchFile) {
-        this.data = new DataManager(this, bankFile);
         this.control = new BankController(this);
+        this.data = new DataManager(this, bankFile);
         if (batchFile == null) {
             this.gui = new GUIManager(this);
             this.batch = null;

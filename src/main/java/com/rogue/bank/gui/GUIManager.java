@@ -27,7 +27,7 @@ import java.util.Observer;
  * @author 1Rogue
  * @version 1.0.0
  */
-public class GUIManager implements Observer {
+public class GUIManager {
 
     private final Bank project;
     private final BankFrame gui;
@@ -46,16 +46,12 @@ public class GUIManager implements Observer {
     }
 
     /**
-     * Handles balance updates
-     *
-     * @since 1.0.0
-     * @version 1.0.0
-     *
-     * @param o The account
-     * @param arg The balance
+     * Returns the {@link BankFrame} the user sees
+     * 
+     * @return The visible BankFrame
      */
-    public void update(Observable o, Object arg) {
-        // does stuff
+    public BankFrame getBankFrame() {
+        return this.gui;
     }
 
 }
