@@ -69,6 +69,7 @@ public class BankFrame extends JFrame {
         this.add(this.list = this.createList(), BorderLayout.CENTER);
         this.add(this.buttonPanel = this.createPanel(), BorderLayout.SOUTH);
 
+        this.setSize(400, 300);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setVisible(true);
     }

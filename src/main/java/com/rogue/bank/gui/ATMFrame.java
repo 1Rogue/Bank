@@ -55,6 +55,9 @@ public class ATMFrame extends JFrame {
         textStuff.add(this.getLabel(), BorderLayout.SOUTH);
         this.add(textStuff, BorderLayout.NORTH);
         this.add(this.getOperationButtons(), BorderLayout.CENTER);
+        this.setSize(400, 300);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        this.setVisible(true);
     }
     
     private JPanel getTextField() {

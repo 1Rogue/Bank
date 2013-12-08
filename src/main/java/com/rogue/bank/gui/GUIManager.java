@@ -17,8 +17,6 @@
 package com.rogue.bank.gui;
 
 import com.rogue.bank.Bank;
-import java.util.Observable;
-import java.util.Observer;
 
 /**
  * Manages GUI for {@link Bank}
