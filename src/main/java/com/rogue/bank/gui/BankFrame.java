@@ -106,6 +106,7 @@ public class BankFrame extends JFrame {
             Account acc = this.project.getBankController().getAccount(id);
             this.accStrings.set(i, String.format("%7s %19s %9.2f", acc.getID(), acc.getDisplayString(), acc.getBalance()));
         }
+        this.list.setListData(this.accStrings.toArray(new String[this.accStrings.size()]));
         this.refreshLabel();
     }
 
