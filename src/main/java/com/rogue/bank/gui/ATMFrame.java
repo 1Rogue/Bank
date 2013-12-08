@@ -48,6 +48,13 @@ public class ATMFrame extends JFrame {
     private ATMState current = ATMState.WELCOME;
     private int accid = -1;
     
+    /**
+     * Enum representing state within the ATM GUI. Holds abstract method for the
+     * OK button usage.
+     * 
+     * @since 1.0.0
+     * @version 1.0.0
+     */
     enum ATMState {
         WELCOME("Welcome to ACME Banking") {
             @Override
@@ -155,17 +162,51 @@ public class ATMFrame extends JFrame {
         
         private final String def;
         
+        /**
+         * Private constructor for ATMState
+         * 
+         * @since 1.0.0
+         * @version 1.0.0
+         * 
+         * @param def The default label for this state
+         */
         private ATMState(String def) {
             this.def = def;
         }
         
+        /**
+         * Gets the default label for this state
+         * 
+         * @since 1.0.0
+         * 2version 1.0.0
+         * 
+         * @return The default label
+         */
         public String getLabel() {
             return this.def;
         }
         
+        /**
+         * Executor method for the OK button
+         * 
+         * @since 1.0.0
+         * @version 1.0.0
+         * 
+         * @param frame The {@link ATMFrame} instance this applies to
+         * @return The new ATMState
+         */
         public abstract ATMState execOK(ATMFrame frame);
     }
 
+    /**
+     * ATMFrame constructor
+     * 
+     * @since 1.0.0
+     * @version 1.0.0
+     * 
+     * @param project The main {@link Bank} instance
+     * @param id The unique ATM id
+     */
     public ATMFrame(Bank project, int id) {
         this.project = project;
         this.setLayout(new BorderLayout());
@@ -179,10 +220,19 @@ public class ATMFrame extends JFrame {
         this.label.setText(this.current.getLabel());
         this.setLocationRelativeTo(null);
         this.setResizable(false);
+        this.setTitle("ATM " + id + ". Robert Carmosino && Spencer Alderman");
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setVisible(true);
     }
     
+    /**
+     * Initializes the text panel
+     * 
+     * @since 1.0.0
+     * @version 1.0.0
+     * 
+     * @return The new {@link JPanel} with the text box
+     */
     private JPanel getTextField() {
         JPanel back = new JPanel();
         text.setEditable(false);
@@ -191,6 +241,14 @@ public class ATMFrame extends JFrame {
         return back;
     }
 
+    /**
+     * Initializes the label panel
+     * 
+     * @since 1.0.0
+     * @version 1.0.0
+     * 
+     * @return The new {@link JPanel} with the label
+     */
     private JPanel getLabel() {
         JPanel back = new JPanel();
         back.setLayout(new BoxLayout(back, BoxLayout.X_AXIS));
@@ -201,6 +259,14 @@ public class ATMFrame extends JFrame {
         return back;
     }
 
+    /**
+     * Initializes the button panel
+     * 
+     * @since 1.0.0
+     * @version 1.0.0
+     * 
+     * @return The new {@link JPanel} of buttons
+     */
     private JPanel getOperationButtons() {
         JPanel back = new JPanel();
         back.setLayout(new GridLayout(5, 3));
@@ -249,11 +315,6 @@ public class ATMFrame extends JFrame {
                     updateLabel(current.getLabel());
                 }
                 updateText("");
-                //verify account x1
-                //verify pin x1
-                //verify deposit x1
-                //verify withdrawal x1
-                //back to transaction x4
             }
 
         });
@@ -270,6 +331,15 @@ public class ATMFrame extends JFrame {
         return back;
     }
 
+    /**
+     * Gets the listener for standard number buttons that append the {@link JTextField}
+     * 
+     * @since 1.0.0
+     * @version 1.0.0
+     * 
+     * @param i The string the button represents
+     * @return A new {@link ActionListener}
+     */
     private ActionListener getNumberListner(final String i) {    
         return new ActionListener() {
 
@@ -280,26 +350,43 @@ public class ATMFrame extends JFrame {
         };
     }
     
+    /**
+     * Updates the numerical text box
+     * 
+     * @since 1.0.0
+     * @version 1.0.0
+     * 
+     * @param in The string to update to
+     */
     public void updateText(final String in) {
+        SwingUtilities.invokeLater(new Runnable() {
+
+            public void run() {
+                text.setText(in);
+            }
+            
+        });
+    }
+    
+    /**
+     * Updates the readable label
+     * 
+     * @since 1.0.0
+     * @version 1.0.0
+     * 
+     * @param in The string to update to
+     */
+    private void updateLabel(final String in) {
         final ATMFrame frame = this;
         SwingUtilities.invokeLater(new Runnable() {
 
             public void run() {
                 String txt = in;
                 if(frame.sess.getAccount() != null) {
-                    txt = in.replaceAll("\\{balance\\}", String.valueOf(frame.project.getBankController().getAccount(frame.sess.getAccount().getID())));
+                    System.out.println("replacing");
+                    txt = txt.replace("{balance}", String.format("$%.2f", frame.project.getBankController().getBalance(frame.sess)));
                 }
-                text.setText(txt);
-            }
-            
-        });
-    }
-    
-    private void updateLabel(final String text) {
-        SwingUtilities.invokeLater(new Runnable() {
-
-            public void run() {
-                label.setText(text);
+                label.setText(txt);
             }
             
         });
