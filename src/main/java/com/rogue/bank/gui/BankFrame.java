@@ -107,7 +107,7 @@ public class BankFrame extends JFrame implements Observer {
         JButton atmButton = new JButton("Open ATM");
         atmButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                ATMFrame atmFrame = new ATMFrame(this.project, ++index);
+                ATMFrame atmFrame = new ATMFrame(project, ++index);
             }
         });
         panel.add(atmButton, BorderLayout.WEST);
