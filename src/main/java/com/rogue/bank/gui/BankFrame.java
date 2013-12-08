@@ -61,6 +61,9 @@ public class BankFrame extends JFrame implements Observer {
         this.add(this.infoLabel = this.createLabel(), BorderLayout.NORTH);
         this.add(this.list = this.createList(), BorderLayout.CENTER);
         this.add(this.buttonPanel = this.createPanel(), BorderLayout.SOUTH);
+        
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setVisible(true);
     }
 
     private ArrayList<String> loadAccounts() {
