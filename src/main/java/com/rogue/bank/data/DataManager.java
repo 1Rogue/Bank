@@ -61,11 +61,17 @@ public class DataManager {
         this.project = project;
         this.bankLoc = bankFile;
         this.loadAccounts();
+        final Thread main = Thread.currentThread();
         Runtime.getRuntime().addShutdownHook(new Thread() {
 
             @Override
             public void run() {
                 saveAccounts();
+                try {
+                    main.join();
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(DataManager.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
 
         });
@@ -157,6 +163,7 @@ public class DataManager {
     private void saveAccounts() {
         File old = new File(this.bankLoc);
         old.renameTo(new File(this.bankLoc + ".old"));
+        old = new File(this.bankLoc + ".old");
         old.deleteOnExit();
         File f = new File(this.bankLoc);
         if (f.exists()) {
