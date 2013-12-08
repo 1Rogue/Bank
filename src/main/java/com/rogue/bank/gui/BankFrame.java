@@ -47,7 +47,6 @@ public class BankFrame extends JFrame {
     private final JList list;
     private final JPanel buttonPanel;
     private final ArrayList<String> accStrings;
-    private int index;
 
     /**
      * BankFrame constructor
@@ -60,8 +59,6 @@ public class BankFrame extends JFrame {
     public BankFrame(Bank project) {
         this.project = project;
         this.accStrings = this.loadAccounts();
-        this.index = 0;
-
         this.setTitle("Robert Carmosino && Spencer Alderman");
         this.setLayout(new BorderLayout());
 
@@ -163,7 +160,7 @@ public class BankFrame extends JFrame {
         JButton atmButton = new JButton("Open ATM");
         atmButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                ATMFrame atmFrame = new ATMFrame(project, ++index);
+                project.getGUIManager().deployATM();
             }
         });
         panel.add(atmButton, BorderLayout.WEST);

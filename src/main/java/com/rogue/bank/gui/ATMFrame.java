@@ -23,6 +23,9 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -47,6 +50,7 @@ public class ATMFrame extends JFrame {
     private final Session sess = new Session();
     private ATMState current = ATMState.WELCOME;
     private int accid = -1;
+    private int atmid = -1;
     
     /**
      * Enum representing state within the ATM GUI. Holds abstract method for the
@@ -218,9 +222,11 @@ public class ATMFrame extends JFrame {
         this.add(this.getOperationButtons(), BorderLayout.CENTER);
         this.setSize(400, 300);
         this.label.setText(this.current.getLabel());
+        this.addWindowListener(this.proccessWindowEvent());
         this.setLocationRelativeTo(null);
         this.setResizable(false);
-        this.setTitle("ATM " + id + ". Robert Carmosino && Spencer Alderman");
+        this.atmid = id;
+        this.setTitle("ATM " + this.atmid + ". Robert Carmosino && Spencer Alderman");
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setVisible(true);
     }
@@ -390,6 +396,25 @@ public class ATMFrame extends JFrame {
             }
             
         });
+    }
+    
+    /**
+     * Handles window closing
+     * 
+     * @since 1.0.0
+     * @version 1.0.0
+     * 
+     * @return A new {@link WindowAdapter} for the frame
+     */
+    public WindowListener proccessWindowEvent() {
+        return new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                if (e.getID() == WindowEvent.WINDOW_CLOSING) {
+                    project.getGUIManager().disposeATM(atmid);
+                }
+            }
+        };
     }
 
 }

@@ -17,6 +17,8 @@
 package com.rogue.bank.gui;
 
 import com.rogue.bank.Bank;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Manages GUI for {@link Bank}
@@ -29,6 +31,8 @@ public class GUIManager {
 
     private final Bank project;
     private final BankFrame gui;
+    private final Map<Integer, ATMFrame> atms = new HashMap();
+    private int index;
 
     /**
      * {@link GUIManager} constructor
@@ -41,6 +45,7 @@ public class GUIManager {
     public GUIManager(Bank project) {
         this.project = project;
         this.gui = new BankFrame(this.project);
+        this.index = 0;
     }
 
     /**
@@ -50,6 +55,28 @@ public class GUIManager {
      */
     public BankFrame getBankFrame() {
         return this.gui;
+    }
+    
+    public synchronized void deployATM() {
+        ATMFrame atmFrame = new ATMFrame(project, ++this.index);
+        this.atms.put(index, atmFrame);
+    }
+    
+    /**
+     * Cleans up and removes an ATM by ID
+     * 
+     * @since 1.0.0
+     * @version 1.0.0
+     * 
+     * @param id 
+     */
+    public void disposeATM(int id) {
+        System.out.println("Dispose called!");
+        ATMFrame frame = this.atms.get(id);
+        if (frame != null) {
+            frame.dispose();
+            this.atms.remove(id);
+        }
     }
 
 }
