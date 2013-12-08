@@ -28,6 +28,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -82,6 +83,18 @@ public class DataManager {
     }
 
     /**
+     * Returns a Collection of all loaded Accounts.
+     *
+     * @since 1.0.0
+     * @version 1.0.0
+     *
+     * @return A Collection of all loaded Accounts.
+     */
+    public synchronized Collection<Account> getAccounts() {
+        return this.accounts.values();
+    }
+
+    /**
      * Loads accounts from the bank file
      *
      * @since 1.0.0
@@ -109,7 +122,7 @@ public class DataManager {
                         if (useGUI) {
                             temp.addObserver(gui);
                         }
-                        this.accounts.put(temp.getID(), temp);
+                        this.registerAccount(temp);
                     } catch (NumberFormatException ex) {
                         // error
                     }
@@ -184,7 +197,7 @@ public class DataManager {
      * @param bal The account balance
      * @return The appropriate {@link Account} type, null if none exists
      */
-    private Account makeAccount(char acc, int aid, int pin, double bal) {
+    public Account makeAccount(char acc, int aid, int pin, double bal) {
         switch (acc) {
             case 's':
                 return new SavingsAccount(aid, pin, bal);
@@ -196,4 +209,34 @@ public class DataManager {
         return null;
     }
 
+    /**
+     * Registers an account to the bank.
+     *
+     * @since 1.0.0
+     * @version 1.0.0
+     *
+     * @param account The account to register
+     * @return If the account was successfully registered
+     */
+    public boolean registerAccount(Account account) {
+        if (this.accounts.containsKey(account.getID())) {
+            return false;
+        } else {
+            this.accounts.put(account.getID(), account);
+            return true;
+        }
+    }
+
+    /**
+     * Unregisters an account from the bank, deleting all known information
+     *
+     * @since 1.0.0
+     * @version 1.0.0
+     *
+     * @param id The id of the account to remove
+     * @return The removed account, null if non-existent
+     */
+    public Account unregisterAccount(int id) {
+        return this.accounts.remove(id);
+    }
 }

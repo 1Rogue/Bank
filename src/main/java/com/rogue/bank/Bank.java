@@ -16,6 +16,7 @@
  */
 package com.rogue.bank;
 
+import com.rogue.bank.batch.BatchManager;
 import com.rogue.bank.control.BankController;
 import com.rogue.bank.data.DataManager;
 import com.rogue.bank.gui.GUIManager;
@@ -31,6 +32,7 @@ public class Bank {
 
     private final DataManager data;
     private final GUIManager gui;
+    private final BatchManager batch;
     private final BankController control;
     private final Session session;
 
@@ -68,8 +70,11 @@ public class Bank {
         this.session = new Session();
         if (batchFile == null) {
             this.gui = new GUIManager(this);
+            this.batch = null;
         } else {
             this.gui = null;
+            this.batch = new BatchManager(this, batchFile);
+            this.batch.execute();
         }
     }
 
