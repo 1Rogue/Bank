@@ -87,7 +87,7 @@ public class BankFrame extends JFrame {
         ArrayList<String> strings = new ArrayList<String>();
         int i = 0;
         for (Account acc : accounts) {
-            strings.add(String.format("%7s %19s %9.2f", acc.getID(), acc.getDisplayString(), acc.getBalance()));
+            strings.add(String.format("%-7s%-19s%-9.2f", acc.getID(), acc.getDisplayString(), acc.getBalance()));
             i++;
         }
         return strings;
@@ -104,7 +104,7 @@ public class BankFrame extends JFrame {
             String str = this.accStrings.get(i);
             int id = Integer.valueOf(str.substring(0, str.indexOf(' ')));
             Account acc = this.project.getBankController().getAccount(id);
-            this.accStrings.set(i, String.format("%7s %19s %9.2f", acc.getID(), acc.getDisplayString(), acc.getBalance()));
+            this.accStrings.set(i, String.format("%-7s%-19s%-9.2f", acc.getID(), acc.getDisplayString(), acc.getBalance()));
         }
         this.list.setListData(this.accStrings.toArray(new String[this.accStrings.size()]));
         this.refreshLabel();

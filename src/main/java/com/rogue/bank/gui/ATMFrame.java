@@ -46,6 +46,125 @@ public class ATMFrame extends JFrame {
     private final JTextField text = new JTextField();
     private final Session sess = new Session();
     private ATMState current = ATMState.WELCOME;
+    private int accid = -1;
+    
+    enum ATMState {
+        WELCOME("Welcome to ACME Banking") {
+            @Override
+            public ATMState execOK(ATMFrame frame) {
+                String val = frame.text.getText();
+                try {
+                    int id = Integer.parseInt(val);
+                    if (!frame.project.getBankController().validAccount(id)) {
+                        frame.updateLabel("Please enter a valid account ID");
+                    } else {
+                        frame.accid = id;
+                        return ATMState.ENTERPIN;
+                    }
+                } catch (NumberFormatException ex) {
+                    frame.updateLabel("Please enter a number");
+                }
+                return this;
+            }
+        },
+        ENTERPIN("Please enter your PIN number") {
+            @Override
+            public ATMState execOK(ATMFrame frame) {
+                String val = frame.text.getText();
+                try {
+                    int pin = Integer.parseInt(val);
+                    if (!frame.project.getBankController().validLogin(frame.sess, frame.accid, pin)) {
+                        return ATMState.TRANSACTION;
+                    }
+                } catch (NumberFormatException ex) {
+                    frame.updateLabel("Please enter a number");
+                }
+                return this;
+            }
+        },
+        TRANSACTION("Enter 1 to view balance, 2 to withdraw, and 3 to deposit") {
+            @Override
+            public ATMState execOK(ATMFrame frame) {
+                String val = frame.text.getText();
+                try {
+                    int act = Integer.parseInt(val);
+                    switch(act) {
+                        case 1:
+                            return ATMState.BALANCE;
+                        case 2:
+                            return ATMState.WITHDRAW;
+                        case 3:
+                            return ATMState.DEPOSIT;
+                    }
+                } catch (NumberFormatException ex) {
+                    frame.updateLabel("Please enter a number");
+                }
+                return this;
+            }
+        },
+        DEPOSIT("Select the amount you would like to deposit") {
+            @Override
+            public ATMState execOK(ATMFrame frame) {
+                String val = frame.text.getText();
+                try {
+                    double amount = Double.parseDouble(val);
+                    if (frame.project.getBankController().deposit(frame.sess, amount)) {
+                        return ATMState.SUCCESS;
+                    }
+                } catch (NumberFormatException ex) {
+                    frame.updateLabel("Please enter a number");
+                }
+                return ATMState.DEPOSIT;
+            }
+        },
+        WITHDRAW("Select the amount you would like to withdraw") {
+            @Override
+            public ATMState execOK(ATMFrame frame) {
+                String val = frame.text.getText();
+                try {
+                    double amount = Double.parseDouble(val);
+                    if (frame.project.getBankController().withdraw(frame.sess, amount)) {
+                        return ATMState.SUCCESS;
+                    } else {
+                        return ATMState.FAILURE;
+                    }
+                } catch (NumberFormatException ex) {
+                    frame.updateLabel("Please enter a number");
+                }
+                return ATMState.WITHDRAW;
+            }
+        },
+        BALANCE("Your current balance is displayed. Press \"OK\" to return.") {
+            @Override
+            public ATMState execOK(ATMFrame frame) {
+                return ATMState.TRANSACTION;
+            }
+        },
+        SUCCESS("Transaction successful") {
+            @Override
+            public ATMState execOK(ATMFrame frame) {
+                return ATMState.TRANSACTION;
+            }
+        },
+        FAILURE("Transaction failed") {
+            @Override
+            public ATMState execOK(ATMFrame frame) {
+                return ATMState.TRANSACTION;
+            }
+        };
+        
+        private final String def;
+        
+        private ATMState(String def) {
+            this.def = def;
+        }
+        
+        public String getLabel() {
+            return this.def;
+        }
+        
+        public abstract ATMState execOK(ATMFrame frame);
+    }
 
     public ATMFrame(Bank project, int id) {
         this.project = project;
@@ -120,10 +239,16 @@ public class ATMFrame extends JFrame {
         });
         back.add(cancel);
         JButton ok = new JButton("OK");
+        final ATMFrame frame = this;
         ok.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                current = current.execOK();
+                ATMState state = current.execOK(frame);
+                if (state != current) {
+                    current = state;
+                    updateLabel(current.getLabel());
+                }
+                updateText("");
                 //verify account x1
                 //verify pin x1
                 //verify deposit x1
@@ -176,72 +301,3 @@ public class ATMFrame extends JFrame {
     }
 
 }
-
-enum ATMState {
-        WELCOME("Welcome to ACME Banking") {
-            @Override
-            public ATMState execOK() {
-                //verification
-                return ATMState.ENTERPIN;
-            }
-        },
-        ENTERPIN("Please enter your PIN number") {
-            @Override
-            public ATMState execOK() {
-                //verification
-                return ATMState.TRANSACTION;
-            }
-        },
-        TRANSACTION("Press 1 to view balance, 2 to withdraw, and 3 to deposit") {
-            @Override
-            public ATMState execOK() {
-                return this;
-            }
-        },
-        DEPOSIT("Select the amount you would like to deposit") {
-            @Override
-            public ATMState execOK() {
-                //verification
-                return ATMState.SUCCESS;
-            }
-        },
-        WITHDRAW("Select the amount you would like to withdraw") {
-            @Override
-            public ATMState execOK() {
-                //verification
-                //success or failure
-                return ATMState.SUCCESS;
-            }
-        },
-        BALANCE("BEHOLD: YOUR BALANCE!!1!") {
-            @Override
-            public ATMState execOK() {
-                //get and display balance
-                return ATMState.TRANSACTION;
-            }
-        },
-        SUCCESS("Transaction successful") {
-            @Override
-            public ATMState execOK() {
-                return ATMState.TRANSACTION;
-            }
-        },
-        FAILURE("Transaction failed") {
-            @Override
-            public ATMState execOK() {
-                return ATMState.TRANSACTION;
-            }
-        };
-        
-        private final String def;
-        
-        private ATMState(String def) {
-            this.def = def;
-        }
-        
-        public String getLabel() {
-            return this.def;
-        }
-        
-        public abstract ATMState execOK();
-    }
