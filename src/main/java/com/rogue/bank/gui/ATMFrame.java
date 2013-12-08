@@ -55,11 +55,11 @@ public class ATMFrame extends JFrame {
                 String val = frame.text.getText();
                 try {
                     int id = Integer.parseInt(val);
-                    if (!frame.project.getBankController().validAccount(id)) {
-                        frame.updateLabel("Please enter a valid account ID");
-                    } else {
+                    if (frame.project.getBankController().validAccount(id)) {
                         frame.accid = id;
                         return ATMState.ENTERPIN;
+                    } else {
+                        frame.updateLabel("Please enter a valid account ID");
                     }
                 } catch (NumberFormatException ex) {
                     frame.updateLabel("Please enter a number");
@@ -73,7 +73,7 @@ public class ATMFrame extends JFrame {
                 String val = frame.text.getText();
                 try {
                     int pin = Integer.parseInt(val);
-                    if (!frame.project.getBankController().validLogin(frame.sess, frame.accid, pin)) {
+                    if (frame.project.getBankController().validLogin(frame.sess, frame.accid, pin)) {
                         return ATMState.TRANSACTION;
                     }
                 } catch (NumberFormatException ex) {
@@ -134,7 +134,7 @@ public class ATMFrame extends JFrame {
                 return ATMState.WITHDRAW;
             }
         },
-        BALANCE("Your current balance is displayed. Press \"OK\" to return.") {
+        BALANCE("Your current balance is {balance}. Press \"OK\" to return.") {
             @Override
             public ATMState execOK(ATMFrame frame) {
                 return ATMState.TRANSACTION;
@@ -281,10 +281,15 @@ public class ATMFrame extends JFrame {
     }
     
     public void updateText(final String in) {
+        final ATMFrame frame = this;
         SwingUtilities.invokeLater(new Runnable() {
 
             public void run() {
-                text.setText(in);
+                String txt = in;
+                if(frame.sess.getAccount() != null) {
+                    txt = in.replaceAll("\\{balance\\}", String.valueOf(frame.project.getBankController().getAccount(frame.sess.getAccount().getID())));
+                }
+                text.setText(txt);
             }
             
         });
