@@ -31,6 +31,8 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Manages bank data
@@ -198,7 +200,7 @@ public class DataManager {
      * @return The appropriate {@link Account} type, null if none exists
      */
     public Account makeAccount(char acc, int aid, int pin, double bal) {
-        switch (acc) {
+        switch (Character.toLowerCase(acc)) {
             case 's':
                 return new SavingsAccount(aid, pin, bal);
             case 'x':
