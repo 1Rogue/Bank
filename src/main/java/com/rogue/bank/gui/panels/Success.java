@@ -18,6 +18,14 @@ package com.rogue.bank.gui.panels;
 
 import com.rogue.bank.Bank;
 import com.rogue.bank.gui.AbsPanel;
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 /**
  * Displays a successful transaction
@@ -37,13 +45,29 @@ public class Success extends AbsPanel {
      * @param project The main {@link Bank}
      * @param type The type of success to display
      */
-    public Success(Bank project, String type) {
+    public Success(final Bank project, final String type) {
         super(project);
+        JPanel top = new JPanel();
+        top.setLayout(new BoxLayout(top, BoxLayout.X_AXIS));
+        top.add(Box.createHorizontalGlue());
+        top.add(new JLabel(type + " successful!"));
+        top.add(Box.createHorizontalGlue());
+        this.add(top, BorderLayout.NORTH);
+        JPanel bottom = new JPanel();
+        JButton ok = new JButton("OK");
+        ok.addActionListener(new ActionListener(){
+
+            public void actionPerformed(ActionEvent e) {
+                project.getGUIManager().getWindow().swapWindow(new Transaction(project));
+            }
+            
+        });
+        
     }
 
     @Override
     public String getTitle() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "Transaction successful";
     }
 
     @Override
