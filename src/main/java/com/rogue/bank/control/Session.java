@@ -14,40 +14,43 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.rogue.bank.gui.panels;
+package com.rogue.bank.control;
 
-import com.rogue.bank.Bank;
-import com.rogue.bank.gui.AbsPanel;
+import com.rogue.bank.data.Account;
 
 /**
- * Main transaction menu
+ * Simple storage of a currently managed session
  *
  * @since 1.0.0
  * @author 1Rogue
  * @version 1.0.0
  */
-public class Transaction extends AbsPanel {
-
+public class Session {
+    
+    private Account acc;
+    
     /**
-     * Login constructor
-     *
+     * Sets the current session's {@link Account}
+     * 
      * @since 1.0.0
      * @version 1.0.0
-     *
-     * @param project The main {@link Bank}
+     * 
+     * @param acc The {@link Account} to set
      */
-    public Transaction(Bank project) {
-        super(project);
+    public void setAccount(Account acc) {
+        this.acc = acc;
     }
-
-    @Override
-    public String getTitle() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public int[] getPanelSize() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    
+    /**
+     * Returns the current session's {@link Account}, null if no account is signed in
+     * 
+     * @since 1.0.0
+     * @version 1.0.0
+     * 
+     * @return The current session's {@link Account}. null if no account is signed in
+     */
+    public Account getAccount() {
+        return this.acc;
     }
 
 }

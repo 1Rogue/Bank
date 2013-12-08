@@ -30,7 +30,6 @@ import java.util.Observer;
 public class GUIManager implements Observer {
 
     private final Bank project;
-    private final GUIWindow window;
 
     /**
      * {@link GUIManager} constructor
@@ -42,7 +41,6 @@ public class GUIManager implements Observer {
      */
     public GUIManager(Bank project) {
         this.project = project;
-        this.window = new GUIWindow(this.project);
     }
 
     /**
@@ -56,10 +54,6 @@ public class GUIManager implements Observer {
      */
     public void update(Observable o, Object arg) {
         // does stuff
-    }
-    
-    public GUIWindow getWindow() {
-        return this.window;
     }
 
 }
