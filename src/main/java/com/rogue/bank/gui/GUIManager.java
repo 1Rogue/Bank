@@ -57,6 +57,12 @@ public class GUIManager {
         return this.gui;
     }
     
+    /**
+     * Deploys a new {@link ATMFrame}
+     * 
+     * @since 1.0.0
+     * @version 1.0.0
+     */
     public synchronized void deployATM() {
         ATMFrame atmFrame = new ATMFrame(project, ++this.index);
         this.atms.put(index, atmFrame);
