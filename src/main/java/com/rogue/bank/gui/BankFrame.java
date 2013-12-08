@@ -38,6 +38,7 @@ import javax.swing.JPanel;
  * BankFrame for showcasing account information.
  *
  * @since 1.0.0
+ * @author 1Rogue
  * @author CrypticStorm
  * @version 1.0.0
  */
@@ -50,6 +51,14 @@ public class BankFrame extends JFrame implements Observer {
     private final ArrayList<String> accStrings;
     private int index;
 
+    /**
+     * BankFrame constructor
+     * 
+     * @since 1.0.0
+     * @version 1.0.0
+     * 
+     * @param project Main {@link Bank} instance
+     */
     public BankFrame(Bank project) {
         this.project = project;
         this.accStrings = this.loadAccounts();
@@ -66,6 +75,14 @@ public class BankFrame extends JFrame implements Observer {
         this.setVisible(true);
     }
 
+    /**
+     * Retrieves a list of formatted accounts for a JList
+     * 
+     * @since 1.0.0
+     * @version 1.0.0
+     * 
+     * @return A string of formatted accounts
+     */
     private ArrayList<String> loadAccounts() {
         Collection<Account> accounts = this.project.getBankController().getAccounts();
         ArrayList<String> strings = new ArrayList<String>();
@@ -77,6 +94,12 @@ public class BankFrame extends JFrame implements Observer {
         return strings;
     }
 
+    /**
+     * Refreshes the account list
+     * 
+     * @since 1.0.0
+     * @version 1.0.0
+     */
     private void refreshAccounts() {
         for (int i = 0; i < this.accStrings.size(); i++) {
             String str = this.accStrings.get(i);
@@ -87,15 +110,37 @@ public class BankFrame extends JFrame implements Observer {
         this.refreshLabel();
     }
 
+    /**
+     * Refreshes the BankFrame label
+     * 
+     * @since 1.0.0
+     * @version 1.0.0
+     */
     private void refreshLabel() {
         this.infoLabel.setText(""+new SimpleDateFormat("H:mm").format(new Date()));
     }
 
+    /**
+     * Creates and returns the JLabel information
+     * 
+     * @since 1.0.0
+     * @version 1.0.0
+     * 
+     * @return A {@link JLabel} for the BankFrame
+     */
     private JLabel createLabel() {
         JLabel label = new JLabel("Bank Accounts");
         return label;
     }
 
+    /**
+     * Creates the account information list
+     * 
+     * @since 1.0.0
+     * @version 1.0.0
+     * 
+     * @return A {@link JList} of account information
+     */
     private JList createList() {
         JList jList = new JList();
         jList.setListData(this.accStrings.toArray(new String[this.accStrings.size()]));
@@ -103,6 +148,14 @@ public class BankFrame extends JFrame implements Observer {
 
     }
 
+    /**
+     * Creates the panel for buttons
+     * 
+     * @since 1.0.0
+     * @version 1.0.0
+     * 
+     * @return The panel for buttons
+     */
     private JPanel createPanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
@@ -127,7 +180,7 @@ public class BankFrame extends JFrame implements Observer {
     }
 
     public void update(Observable o, Object arg) {
-        if (!(o instanceof Account) || !(arg instanceof UpdatePacket)) {
+        if (!(o instanceof Account || arg instanceof UpdatePacket)) {
             return;
         }
 
