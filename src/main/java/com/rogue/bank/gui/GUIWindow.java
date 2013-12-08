@@ -71,9 +71,7 @@ public final class GUIWindow extends JFrame {
                 panel.setSize(size[0], size[1]);
                 setSize(size[0], size[1]);
                 setLocationRelativeTo(null);
-                setVisible(false);
                 validate();
-                setVisible(true);
                 repaint();
             }
 
