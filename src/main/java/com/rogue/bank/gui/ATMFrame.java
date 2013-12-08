@@ -329,7 +329,7 @@ public class ATMFrame extends JFrame {
         close.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                dispose();
+                project.getGUIManager().disposeATM(atmid);
             }
 
         });

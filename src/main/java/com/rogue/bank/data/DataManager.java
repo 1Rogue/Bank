@@ -21,7 +21,6 @@ import com.rogue.bank.control.BankController;
 import com.rogue.bank.data.accounts.CDAccount;
 import com.rogue.bank.data.accounts.CheckingAccount;
 import com.rogue.bank.data.accounts.SavingsAccount;
-import com.rogue.bank.gui.GUIManager;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -29,17 +28,18 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Manages bank data
  *
  * @since 1.0.0
- * @author 1Rogue
+ * @author Spencer Alderman
  * @version 1.0.0
  */
 public class DataManager {
@@ -67,11 +67,12 @@ public class DataManager {
 
             @Override
             public void run() {
+                displayBankData("Final");
                 saveAccounts();
                 try {
                     main.join();
                 } catch (InterruptedException ex) {
-                    Logger.getLogger(DataManager.class.getName()).log(Level.SEVERE, null, ex);
+                    System.err.println("Fatal error: " + ex.getMessage());
                 }
             }
 
@@ -130,14 +131,14 @@ public class DataManager {
                         temp.addObserver(controller);
                         this.registerAccount(temp);
                     } catch (NumberFormatException ex) {
-                        // error
+                        // don't uses
                     }
                 }
             }
         } catch (FileNotFoundException ex) {
-            // error
+            System.err.println("Error: " + ex.getMessage());
         } catch (IOException ex) {
-            // error
+            System.err.println("Error: " + ex.getMessage());
         } finally {
             try {
                 if (fr != null) {
@@ -147,7 +148,7 @@ public class DataManager {
                     reader.close();
                 }
             } catch (IOException ex) {
-                // error
+                System.err.println("Error: " + ex.getMessage());
             }
         }
     }
@@ -177,7 +178,7 @@ public class DataManager {
                 writer.write(acc.formatWith(this.delimiter) + "\n");
             }
         } catch (IOException ex) {
-            // error
+            System.err.println("Error: " + ex.getMessage());
         } finally {
             try {
                 if (writer != null) {
@@ -187,7 +188,7 @@ public class DataManager {
                     fw.close();
                 }
             } catch (IOException ex) {
-                // error
+                System.err.println("Error: " + ex.getMessage());
             }
         }
     }
@@ -245,5 +246,31 @@ public class DataManager {
      */
     public Account unregisterAccount(int id) {
         return this.accounts.remove(id);
+    }
+    
+    /**
+     * Displays bank data.
+     *
+     * @since 1.0.0
+     * @version 1.0.0
+     * 
+     * @param param The title of the bank data
+     */
+    public void displayBankData(String param) {
+        System.out.println("========== " + param + " Bank Data ==================");
+        System.out.println();
+        System.out.println("Account Type    Account Balance");
+        System.out.println("------------    ------- -----------");
+
+        List<Account> accs = new ArrayList<Account>(this.project.getBankController().getAccounts());
+        Collections.sort(accs);
+        for (Account account : accs) {
+            System.out.format("%-11s $   %7d $ %9.2f", account.getDisplayString(), account.getID(), account.getBalance());
+            System.out.println();
+        }
+
+        System.out.println();
+        System.out.println("===============================================");
+        System.out.println();
     }
 }

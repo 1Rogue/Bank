@@ -77,7 +77,6 @@ public class GUIManager {
      * @param id 
      */
     public void disposeATM(int id) {
-        System.out.println("Dispose called!");
         ATMFrame frame = this.atms.get(id);
         if (frame != null) {
             frame.dispose();

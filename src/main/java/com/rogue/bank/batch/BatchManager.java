@@ -17,21 +17,13 @@
 package com.rogue.bank.batch;
 
 import com.rogue.bank.Bank;
-import com.rogue.bank.batch.commands.ApplyInterestCommand;
-import com.rogue.bank.batch.commands.CloseCommand;
-import com.rogue.bank.batch.commands.DepositCommand;
-import com.rogue.bank.batch.commands.OpenCommand;
-import com.rogue.bank.batch.commands.WithdrawCommand;
-import com.rogue.bank.data.Account;
+import com.rogue.bank.batch.commands.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -90,18 +82,13 @@ public class BatchManager {
      * @version 1.0.0
      */
     public void execute() {
-        BufferedReader reader;
-        try {
-            reader = new BufferedReader(new FileReader(this.batchFile));
-        } catch (FileNotFoundException ex) {
-            System.err.println("File does not exist.");
-            return;
-        }
-
-        this.displayInitialBankData();
-
+        
+        this.project.getDataManager().displayBankData("Initial");
+        
+        BufferedReader reader = null;
         String line;
         try {
+            reader = new BufferedReader(new FileReader(this.batchFile));
             while ((line = reader.readLine()) != null) {
                 BatchCommand command = this.commands.get(line.charAt(0));
                 if (command != null) {
@@ -114,55 +101,13 @@ public class BatchManager {
                     command.execute(this.project.getBankController(), args);
                 }
             }
-            this.displayFinalBankData();
+            this.project.getDataManager().displayBankData("Final");
+        } catch (FileNotFoundException ex) {
+            System.err.println("File does not exist.");
+            System.exit(1);
         } catch (IOException e) {
             System.err.println("Error reading the batch file.");
+            System.exit(1);
         }
-    }
-
-    /**
-     * Displays initial bank data.
-     *
-     * @since 1.0.0
-     * @version 1.0.0
-     */
-    private void displayInitialBankData() {
-        System.out.println("========== Initial Bank Data ==================");
-        System.out.println();
-        System.out.println("Account Type    Account Balance");
-        System.out.println("------------    ------- -----------");
-
-        List<Account> accounts = new ArrayList<Account>(this.project.getBankController().getAccounts());
-        Collections.sort(accounts);
-        for (Account account : accounts) {
-            System.out.format("-11%s $    %7d $ %9.2f", account.getDisplayString(), account.getID(), account.getBalance());
-        }
-
-        System.out.println();
-        System.out.println("===============================================");
-        System.out.println();
-    }
-
-    /**
-     * Displays final bank data.
-     *
-     * @since 1.0.0
-     * @version 1.0.0
-     */
-    private void displayFinalBankData() {
-        System.out.println("==========   Final Bank Data ==================");
-        System.out.println();
-        System.out.println("Account Type    Account Balance");
-        System.out.println("------------    ------- -----------");
-
-        List<Account> accounts = new ArrayList<Account>(this.project.getBankController().getAccounts());
-        Collections.sort(accounts);
-        for (Account account : accounts) {
-            System.out.format("-11%s $    %7d $ %9.2f", account.getDisplayString(), account.getID(), account.getBalance());
-        }
-
-        System.out.println();
-        System.out.println("===============================================");
-        System.out.println();
     }
 }
