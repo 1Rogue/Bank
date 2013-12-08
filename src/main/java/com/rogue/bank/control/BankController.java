@@ -50,21 +50,22 @@ public class BankController {
      * @since 1.0.0
      * @version 1.0.0
      *
+     * @param sess The session relevant to this transaction
      * @param id The id to check for
      * @param pin The pin to verify with
      * @return True if valid id and pin, false otherwise
      */
-    public boolean validLogin(int id, int pin) {
+    public boolean validLogin(Session sess, int id, int pin) {
         Account acc = this.project.getDataManager().getAccount(id);
         if (acc != null && acc.getPIN() == pin) {
-            this.project.getSession().setAccount(acc);
+            sess.setAccount(acc);
             return true;
         }
         return false;
     }
 
     /**
-     * Verifies the existance of an {@link Account}, but does not verify the pin
+     * Verifies the existence of an {@link Account}, but does not verify the pin
      *
      * @since 1.0.0
      * @version 1.0.0
@@ -147,11 +148,12 @@ public class BankController {
      * @since 1.0.0
      * @version 1.0.0
      *
+     * @param sess The session relevant to this transaction
      * @param amount The amount to deposit
      * @return If the deposit was successful
      */
-    public synchronized boolean deposit(double amount) {
-        Account acc = this.project.getSession().getAccount();
+    public synchronized boolean deposit(Session sess, double amount) {
+        Account acc = sess.getAccount();
         if (acc.canDeposit(amount)) {
             acc.deposit(amount);
             return true;
@@ -166,10 +168,11 @@ public class BankController {
      * @since 1.0.0
      * @version 1.0.0
      *
+     * @param sess The session relevant to this transaction
      * @return The current {@link Account} balance
      */
-    public synchronized double getBalance() {
-        return this.project.getSession().getAccount().getBalance();
+    public synchronized double getBalance(Session sess) {
+        return sess.getAccount().getBalance();
     }
 
     /**
@@ -178,11 +181,12 @@ public class BankController {
      * @since 1.0.0
      * @version 1.0.0
      *
+     * @param sess The session relevant to this transaction
      * @param amount The amount of money to withdraw
      * @return True if withdrawn, false if invalid amount or prevented
      */
-    public synchronized boolean withdraw(double amount) {
-        Account acc = this.project.getSession().getAccount();
+    public synchronized boolean withdraw(Session sess, double amount) {
+        Account acc = sess.getAccount();
         if (acc.canWithdraw(amount)) {
             acc.withdraw(amount);
             return true;
