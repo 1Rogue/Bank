@@ -57,5 +57,9 @@ public class GUIManager implements Observer {
     public void update(Observable o, Object arg) {
         // does stuff
     }
+    
+    public GUIWindow getWindow() {
+        return this.window;
+    }
 
 }

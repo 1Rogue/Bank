@@ -18,7 +18,16 @@ package com.rogue.bank.gui.panels;
 
 import com.rogue.bank.Bank;
 import com.rogue.bank.gui.AbsPanel;
-import java.awt.GridLayout;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 /**
  * Login panel for {@link GUIWindow}
@@ -29,6 +38,8 @@ import java.awt.GridLayout;
  */
 public class Welcome extends AbsPanel {
     
+    private JLabel label = new JLabel("");
+    
     /**
      * Welcome constructor
      * 
@@ -37,10 +48,56 @@ public class Welcome extends AbsPanel {
      * 
      * @param project The main {@link Bank}
      */
-    public Welcome(Bank project){
+    public Welcome(final Bank project){
         super(project);
         
-        this.setLayout(new GridLayout(0, 3));
+        this.setLayout(new BorderLayout());
+        this.add(this.label, BorderLayout.NORTH);
+        JPanel main = new JPanel();
+        main.setLayout(new FlowLayout(FlowLayout.RIGHT));
+        main.add(new JLabel("Enter Account ID:"));
+        final JTextField acc = new JTextField();
+        acc.setPreferredSize(new Dimension(150,30));
+        main.add(acc);
+        JButton jb = new JButton("Submit");
+        jb.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                String val = acc.getText();
+                try {
+                    int id = Integer.parseInt(val);
+                    if (!project.getBankController().validAccount(id)) {
+                        updateLabel("Please enter a valid account ID");
+                    } else {
+                        project.getSession().setAccount(project.getBankController().getAccount(id));
+                        project.getGUIManager().getWindow().swapWindow(new EnterPIN(project));
+                    }
+                } catch (NumberFormatException ex) {
+                    updateLabel("Please enter a number");
+                }
+            }
+            
+        });
+        main.add(jb);
+        this.add(main, BorderLayout.SOUTH);
+    }
+    
+    /**
+     * Sets the text of an error label
+     * 
+     * @since 1.0.0
+     * @version 1.0.0
+     * 
+     * @param update The string to set
+     */
+    private void updateLabel(final String update) {
+        SwingUtilities.invokeLater(new Runnable() {
+
+            public void run() {
+                label.setText(update);
+            }
+            
+        });
     }
 
     @Override
@@ -50,7 +107,7 @@ public class Welcome extends AbsPanel {
 
     @Override
     public int[] getPanelSize() {
-        return new int[] {300, 100};
+        return new int[] {350, 100};
     }
 
 }

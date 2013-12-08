@@ -20,6 +20,7 @@ import com.rogue.bank.Bank;
 import com.rogue.bank.gui.panels.*;
 import java.awt.BorderLayout;
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 /**
  * Main window instance
@@ -29,45 +30,54 @@ import javax.swing.JFrame;
  * @version 1.0.0
  */
 public final class GUIWindow extends JFrame {
-    
+
     private final Bank project;
-    
+
     /**
      * {@link GUIWindow} constructor
-     * 
+     *
      * @since 1.0.0
      * @version 1.0.0
-     * 
+     *
      * @param project Main {@link Bank} instance
      */
     public GUIWindow(Bank project) {
         this.project = project;
-        
+
         this.swapWindow(new Welcome(this.project));
         this.setResizable(false);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setVisible(true);
     }
-    
+
     /**
      * Swaps the current GUI panel with a new one
-     * 
+     *
      * @since 1.0.0
      * @version 1.0.0
-     * 
+     *
      * @param panel The panel to swap with
      */
-    public void swapWindow(AbsPanel panel) {
-        this.removeAll();
-        
-        this.setLayout(new BorderLayout());
-        this.add(panel, BorderLayout.CENTER);
-        this.setTitle(panel.getTitle());
-        int[] size = panel.getPanelSize();
-        this.setSize(size[0], size[1]);
-        this.setLocationRelativeTo(null);
-        this.validate();
-        this.repaint();
+    public void swapWindow(final AbsPanel panel) {
+        SwingUtilities.invokeLater(new Runnable() {
+
+            @Override
+            public void run() {
+                getContentPane().removeAll();
+                setLayout(new BorderLayout());
+                add(panel, BorderLayout.CENTER);
+                setTitle(panel.getTitle());
+                int[] size = panel.getPanelSize();
+                panel.setSize(size[0], size[1]);
+                setSize(size[0], size[1]);
+                setLocationRelativeTo(null);
+                setVisible(false);
+                validate();
+                setVisible(true);
+                repaint();
+            }
+
+        });
     }
 
 }

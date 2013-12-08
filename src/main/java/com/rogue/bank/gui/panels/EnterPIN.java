@@ -42,12 +42,12 @@ public class EnterPIN extends AbsPanel {
 
     @Override
     public String getTitle() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "Enter your PIN";
     }
 
     @Override
     public int[] getPanelSize() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new int[] {350, 100};
     }
 
 }
